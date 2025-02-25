@@ -22,9 +22,14 @@ class BaseModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        """ Garante que o usuário responsável seja registrado ao salvar """
+        """Garante que o usuário responsável seja registrado ao salvar"""
         if hasattr(self, '_request_user') and self._request_user:
-            self.atualizado_por = self._request_user
+            if not self.atualizado_por:
+                self.atualizado_por = self._request_user
+            if not self.empresa_id:
+                self.empresa = self._request_user.empresa
+            if not self.filial_id:
+                self.filial = self._request_user.filial
         super().save(*args, **kwargs)
 
 class Fazenda(BaseModel):
@@ -34,28 +39,32 @@ class Fazenda(BaseModel):
     class Meta:
         db_table = 'fazendas'
 
+    def save(self, *args, **kwargs):
+        self.nome = self.nome.upper()  # Atribuir o valor em maiúsculas
+        self.localizacao = self.localizacao.upper() if self.localizacao else None  # Verifica se não é None
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'Fazenda {self.nome}'
+
 
 class Talhao(BaseModel):
     fazenda = models.ForeignKey(Fazenda, on_delete=models.CASCADE, related_name='talhoes')
     nome = models.CharField(max_length=255, db_index=True)
-    area = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
-        help_text="Área do talhão (pode ser em hectares ou m²)"
-    )
-    unidade_medida = models.CharField(
-        max_length=20, 
-        default="hectares", 
-        help_text="Unidade de medida da área (ex: hectares, m²)"
-    )
+    area = models.DecimalField(max_digits=10, decimal_places=2, help_text="Área do talhão (pode ser em hectares ou m²)")
+    unidade_medida = models.CharField(max_length=20, default="hectares", help_text="Unidade de medida da área (ex: hectares, m²)")
 
     class Meta:
         db_table = 'talhoes'
 
+    def save(self, *args, **kwargs):
+        self.nome = self.nome.upper()
+        self.unidade_medida = self.unidade_medida.upper()  # Atribuir o valor em maiúsculas
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.nome} ({self.fazenda.nome})"
+
 
 class CategoriaProduto(BaseModel):
     nome = models.CharField(max_length=255, unique=True, db_index=True)
@@ -63,10 +72,13 @@ class CategoriaProduto(BaseModel):
     class Meta:
         db_table = 'categorias_produtos'
 
+    def save(self, *args, **kwargs):
+        self.nome = self.nome.upper()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.nome
-    
-    
+
 
 class ProdutoAgro(BaseModel):
     codigo = models.CharField(max_length=100, unique=True, db_index=True)
@@ -83,9 +95,17 @@ class ProdutoAgro(BaseModel):
 
     class Meta:
         db_table = 'produtos_agro'
+        
+    
+    def save(self, *args, **kwargs):
+        self.nome = self.nome.upper()
+        self.unidade_medida = self.unidade_medida.upper()
+        self.descricao = self.descricao.upper() if self.descricao else None  # Verifica se não é None
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.codigo} - {self.nome} ({self.categoria})"
+
     
     
 

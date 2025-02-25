@@ -59,14 +59,12 @@ h2 {
 }
 
 .card {
+  color: aliceblue;
   margin-top: 2%;
-  background: linear-gradient(rgb(226, 247, 254), rgb(206, 206, 206));
+  background: linear-gradient(rgb(52, 52, 74), rgb(145, 157, 161));
   border: 2px solid rgb(26, 112, 138);
-  /* Borda do cartão */
   border-radius: 8px;
-  /* Opcional: para bordas arredondadas */
   padding: 20px;
-  /* Opcional: para adicionar algum espaço interno */
 }
 
 .form-control {

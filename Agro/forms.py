@@ -6,6 +6,8 @@ class BaseForm(forms.ModelForm):
     def save(self, commit=True, user=None):
         instance = super().save(commit=False)
         if user:
+            # Define o _request_user para que o modelo possa acessá-lo no save()
+            instance._request_user = user  
             instance.atualizado_por = user
             if not instance.empresa_id:
                 instance.empresa = user.empresa

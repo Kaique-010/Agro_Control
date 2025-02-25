@@ -25,6 +25,11 @@ class FazendaCreateView( CreateView):
     template_name = "agro/fazenda_form.html"
     success_url = reverse_lazy("fazenda_list")
     
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
+    
     
 
 
