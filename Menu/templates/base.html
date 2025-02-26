@@ -2,201 +2,189 @@
 
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Agro Control{% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Agro Control{% endblock %}</title>
 
-    <!-- CSS Customizado -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  </head>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
 
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark fixed-top">
-      <div class="d-flex align-items-center w-100">
-        <button
-          class="navbar-toggler ms-2"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasDarkNavbar"
-          aria-controls="offcanvasDarkNavbar"
-          aria-label="Toggle navigation"
-        >
-          <i class="bi bi-grid-fill fs-2"></i>
-        </button>
-        <a class="navbar-brand mx-auto" href="/">Agro Control</a>
-        <img
-          src="{% static 'accounts/image/logo.jpg' %}"
-          alt="Agro Control"
-          class="logo"
-          style="height: 50px"
-          style="width: 35px"
-        />
-      </div>
-    </nav>
+  <!-- CSS Customizado -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
 
-    <!-- Offcanvas Sidebar -->
-    <div
-      class="offcanvas offcanvas-start text-bg-dark"
-      tabindex="-1"
-      id="offcanvasDarkNavbar"
-    >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menu</h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="offcanvas"
-        ></button>
-      </div>
-      <div class="offcanvas-body">
-        {%if user.is_authenticated%}
-
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'home' %}">
-              <i class="bi bi-house fs-3"></i> Home
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-            >
-              <i class="bi bi-gear-wide-connected fs-4"></i> Parametrizações
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="#">Empresas</a></li>
-              <li><a class="dropdown-item" href="#">Filiais</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-            >
-              <i class="bi bi-box-seam fs-4"></i> Agrícola
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li>
-                <a class="dropdown-item" href="{% url 'animal_list' %}"
-                  >Animais</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="{% url 'aplicacaoinsumos_list' %}"
-                  >Aplicação de Insumos</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="{% url 'categoria_produto_list' %}"
-                  >Categorias de Produtos</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'estoquefazenda_list' %}"
-                  >Estoque Fazenda</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'fazenda_list' %}"
-                  >Fazendas</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="{% url 'movimentacaoestoque_list' %}"
-                  >Movimentações de Estoque</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'produtoagro_list' %}"
-                  >Produtos Agrícolas</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'talhao_list' %}"
-                  >Talhões</a
-                >
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/entidades/">
-              <i class="bi bi-person-gear fs-3"></i> Pessoas
-            </a>
-          </li>
-        </ul>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger w-100 mt-3">Sair</button>
-        </form>
-
-        {%else%}
-        <p>Necessário Estar Logado</p>
-        {%endif%}
-      </div>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark fixed-top">
+    <div class="d-flex align-items-center w-100">
+      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+        aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+        <i class="bi bi-grid-fill fs-2"></i>
+      </button>
+      <a class="navbar-brand mx-auto" href="/">Agro Control</a>
+      <img src="{% static 'accounts/image/logo.jpg' %}" alt="Agro Control" class="logo" style="height: 50px"
+        style="width: 35px" />
     </div>
+  </nav>
 
-    <!-- Conteúdo da Página -->
-    <div class="container mt-5 pt-4">{% block content %}{% endblock %}</div>
+  <!-- Offcanvas Sidebar -->
+  <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      {%if user.is_authenticated%}
 
-    <!-- Rodapé -->
-    <footer class="text-white text-center mt-5 py-3">
-      <p>&copy; 2025 Agro Control</p>
-      <ul class="list-inline">
-        <li class="list-inline-item">
-          <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'home' %}">
+            <i class="bi bi-house fs-3"></i> Home
+          </a>
         </li>
-        <li class="list-inline-item">
-          <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-gear-wide-connected fs-4"></i> Configurações
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="{% url 'enterprise_list'%}">Empresas</a></li>
+            <li><a class="dropdown-item" href="{% url 'branches_list'%}">Filiais</a></li>
+          </ul>
         </li>
-        <li class="list-inline-item">
-          <a href="#" class="text-white"
-            ><i class="bi bi-instagram fs-4"></i
-          ></a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              AGENDA
+              <i class="bi bi-calendar fs-4"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_eventos' %}">EVENTOS</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'eventos' %}">CALENDÁRIO</a>
+              </li>
+            </ul>
+          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-box-seam fs-4"></i> Agrícola
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" href="{% url 'animal_list' %}">Animais</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'aplicacaoinsumos_list' %}">Aplicação de Insumos</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'categoria_produto_list' %}">Categorias de Produtos</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'estoquefazenda_list' %}">Estoque Fazenda</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'fazenda_list' %}">Fazendas</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'movimentacaoestoque_list' %}">Movimentações de Estoque</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'produtoagro_list' %}">Produtos Agrícolas</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'talhao_list' %}">Talhões</a>
+            </li>
+          </ul>
         </li>
-        <li class="list-inline-item">
-          <a href="#" class="text-white"><i class="bi bi-linkedin fs-5"></i></a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            FINANCEIRO
+            <i class="bi bi-currency-dollar fs-4"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" href="{% url 'categorias_list' %}">CATEGORIAS</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'formas_pagamento_list' %}">FORMAS DE PAGAMENTO</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'formas_recebimento_list' %}">FORMAS DE RECEBIMENTO</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'conta_a_pagar_list' %}">DOCUMENTOS A PAGAR</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'conta_a_receber_list' %}">DOCUMENTOS A RECEBER</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'fluxo_caixa' %}">FLUXO DE CAIXA</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'parcelas_geradas' %}">PARCELAS GERADAS</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'pessoaslistas' %}">
+            <i class="bi bi-person-gear fs-3"></i> Pessoas
+          </a>
         </li>
       </ul>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger w-100 mt-3">Sair</button>
+      </form>
 
-      <p id="dataAcesso">Acesso em:</p>
-      {% if user.is_authenticated %}
-      <p>Usuário: {{ user.name }}</p>
-      {% else %}
-      <p>Faça seu Login</p>
-      {% endif %}
-    </footer>
+      {%else%}
+      <p>Necessário Estar Logado</p>
+      {%endif%}
+    </div>
+  </div>
 
-    <script>
-      const dataAtual = new Date();
-      const options = { year: "numeric", month: "long", day: "numeric" };
-      const dataFormatada = dataAtual.toLocaleDateString("pt-BR", options);
-      document.getElementById(
-        "dataAcesso"
-      ).textContent = `Acesso em: ${dataFormatada}`;
-    </script>
+  <!-- Conteúdo da Página -->
+  <div class="container mt-5 pt-4">{% block content %}{% endblock %}</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  <!-- Rodapé -->
+  <footer class="text-white text-center mt-5 py-3">
+    <p>&copy; 2025 Agro Control</p>
+    <ul class="list-inline">
+      <li class="list-inline-item">
+        <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+      </li>
+      <li class="list-inline-item">
+        <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+      </li>
+      <li class="list-inline-item">
+        <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+      </li>
+      <li class="list-inline-item">
+        <a href="#" class="text-white"><i class="bi bi-linkedin fs-5"></i></a>
+      </li>
+    </ul>
+
+    <p id="dataAcesso">Acesso em:</p>
+    {% if user.is_authenticated %}
+    <p>Usuário: {{ user.name }}</p>
+    {% else %}
+    <p>Faça seu Login</p>
+    {% endif %}
+  </footer>
+
+  <script>
+    const dataAtual = new Date();
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const dataFormatada = dataAtual.toLocaleDateString("pt-BR", options);
+    document.getElementById(
+      "dataAcesso"
+    ).textContent = `Acesso em: ${dataFormatada}`;
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

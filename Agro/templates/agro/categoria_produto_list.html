@@ -16,19 +16,12 @@
       </center>
       <div class="container-search mb-4">
         <form method="get" class="search-form">
-          <input
-            type="text"
-            name="search"
-            placeholder="Buscar categoria"
-            value="{{ request.GET.search }}"
-            class="form-control"
-          />
+          <input type="text" name="search" placeholder="Buscar categoria" value="{{ request.GET.search }}"
+            class="form-control" />
           <button type="submit" class="btn btn-primary mt-2">Buscar</button>
         </form>
       </div>
-      <a href="{% url 'categoria_produto_form' %}" class="btn btn-success mb-3"
-        >Nova Categoria</a
-      >
+      <a href="{% url 'categoria_produto_form' %}" class="btn btn-success mb-3">Nova Categoria</a>
       {% if categorias %}
       <table class="table table-bordered">
         <thead>
@@ -42,16 +35,8 @@
           {% for categoria in categorias %}
           <tr>
             <td>
-              <a
-                href="{% url 'categoria_produto_update' categoria.id %}"
-                class="btn btn-warning btn-sm"
-                >Editar</a
-              >
-              <a
-                href="{% url 'categoria_produto_delete' categoria.id %}"
-                class="btn btn-danger btn-sm"
-                >Excluir</a
-              >
+              <a href="{% url 'categoria_produto_update' categoria.id %}" class="btn btn-warning btn-sm">Editar</a>
+              <a href="{% url 'categoria_produto_delete' categoria.id %}" class="btn btn-danger btn-sm">Excluir</a>
             </td>
             <td>{{ categoria.id }}</td>
             <td>{{ categoria.nome }}</td>

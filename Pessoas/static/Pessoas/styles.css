@@ -1,0 +1,70 @@
+/* Estilos para as abas */
+.tab-buttons {
+  display: flex;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  border-bottom: 1px solid transparent;
+}
+
+.tab-content {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 0 0 5px 5px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.card-title {
+  color: rgb(225, 211, 193);
+  /* Define a cor do texto */
+  text-align: center;
+  /* Centraliza o texto, se desejar */
+}
+
+.card {
+  border-width: 2px;
+  border-color: #5d88b6;
+  border-style: solid;
+  background: linear-gradient(rgb(52, 52, 74), rgb(145, 157, 161));
+  color: antiquewhite;
+}
+
+.form-control {
+  border-width: 2px;
+  border-color: #5d88b6;
+  border-style: solid;
+}
+
+h3 {
+  text-align: center;
+  color: rgb(225, 211, 193);
+}
+
+h4 {
+  text-align: center;
+  color: rgb(225, 211, 193);
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+/* Estilo adicional para o grid */
+.form-group {
+  margin-bottom: 1rem;
+}

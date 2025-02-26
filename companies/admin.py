@@ -1,7 +1,7 @@
 # admin.py
 
 from django.contrib import admin
-from .models import Enterprise, Branches
+from .models import Enterprise, Branch
 
 class EnterpriseAdmin(admin.ModelAdmin):
     list_display = ('name', 'document', 'user')
@@ -13,4 +13,4 @@ class BranchesAdmin(admin.ModelAdmin):
 
 # Registrando os modelos no admin
 admin.site.register(Enterprise, EnterpriseAdmin)
-admin.site.register(Branches, BranchesAdmin)
+admin.site.register(Branch, BranchesAdmin)

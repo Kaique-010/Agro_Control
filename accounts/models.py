@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     empresa = models.ForeignKey(Enterprise, on_delete=models.CASCADE, null=True, blank=True, related_name='usuarios')
-    filial = models.ForeignKey('companies.Branches', on_delete=models.CASCADE, null=True, blank=True, related_name='usuarios')
+    filial = models.ForeignKey('companies.Branch', on_delete=models.CASCADE, null=True, blank=True, related_name='usuarios')
     is_owner = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # Para permitir acesso ao admin
     is_superuser = models.BooleanField(default=False)  # Para identificar superusuário

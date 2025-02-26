@@ -3,6 +3,7 @@ from django.forms import ValidationError
 from django.http import Http404, HttpResponse
 from django.core.exceptions import PermissionDenied
 import csv
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -59,6 +60,11 @@ class TalhaoCreateView( CreateView):
     form_class = TalhaoForm
     template_name = "agro/talhao_form.html"
     success_url = reverse_lazy("talhao_list")
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 
@@ -87,6 +93,11 @@ class ProdutoAgroCreateView( CreateView):
     form_class = ProdutoAgroForm
     template_name = "agro/produtoagro_form.html"
     success_url = reverse_lazy("produtoagro_list")
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 class ProdutoAgroUpdateView( UpdateView):
@@ -113,6 +124,12 @@ class EstoqueFazendaCreateView( CreateView):
     form_class = EstoqueFazendaForm
     template_name = "agro/estoquefazenda_form.html"
     success_url = reverse_lazy("estoquefazenda_list")
+    
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 
@@ -140,6 +157,12 @@ class MovimentacaoEstoqueCreateView( CreateView):
     form_class = MovimentacaoEstoqueForm
     template_name = "agro/movimentacaoestoque_form.html"
     success_url = reverse_lazy("movimentacaoestoque_list")
+    
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 class MovimentacaoEstoqueUpdateView( UpdateView):
@@ -167,6 +190,11 @@ class AplicacaoInsumosCreateView( CreateView):
     form_class = AplicacaoInsumosForm
     template_name = "agro/aplicacaoinsumos_form.html"
     success_url = reverse_lazy("aplicacaoinsumos_list")
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 
@@ -195,6 +223,11 @@ class AnimalCreateView( CreateView):
     form_class = AnimalForm
     template_name = "agro/animal_form.html"
     success_url = reverse_lazy("animal_list")
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 
@@ -210,6 +243,8 @@ class AnimalDeleteView( DeleteView):
     model = Animal
     template_name = "agro/animal_confirm_delete.html"
     success_url = reverse_lazy("animal_list")
+    
+    
 
 # Evento Animal Views
 class EventoAnimalListView( ListView):
@@ -222,6 +257,12 @@ class EventoAnimalCreateView( CreateView):
     form_class = EventoAnimalForm
     template_name = "agro/eventoanimal_form.html"
     success_url = reverse_lazy("eventoanimal_list")
+    
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 class EventoAnimalUpdateView( UpdateView):
@@ -248,6 +289,11 @@ class CicloFlorestalCreateView( CreateView):
     form_class = CicloFlorestalForm
     template_name = "agro/cicloflorestal_form.html"
     success_url = reverse_lazy("cicloflorestal_list")
+    
+    def form_valid(self, form):
+        # Aqui, o usuário logado é passado para o formulário
+        form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 class CicloFlorestalUpdateView( UpdateView):
@@ -262,10 +308,12 @@ class CicloFlorestalDeleteView( DeleteView):
     template_name = "agro/cicloflorestal_confirm_delete.html"
     success_url = reverse_lazy("cicloflorestal_list")
 
-# Categoria Produto Views
+
+
 class CategoriaProdutoListView( ListView):
     model = CategoriaProduto
     template_name = "agro/categoria_produto_list.html"
+    context_object_name = 'categorias'
 
 
 
@@ -274,6 +322,23 @@ class CategoriaProdutoCreateView( CreateView):
     form_class = CategoriaProdutoForm
     template_name = "agro/categoria_produto_form.html"
     success_url = reverse_lazy("categoria_produto_list")
+    
+    def form_valid(self, form):
+        try:
+            form.save(user=self.request.user)
+            return super().form_valid(form)
+        except IntegrityError as e:
+            if 'categorias_produtos_nome_key' in str(e):
+                form.add_error("nome", "Já Existe uma categoria com este nome.")
+            else:
+                form.add_error(None, "Erro ao salvar a categoria. Tente novamente")
+            return self.form_invalid(form)
+    def form_invalid(self, form):
+        messages.error(self.request, "Corrija os erros abaixo e tente Novamente")
+        return super().form_invalid(form)
+
+    
+            
 
 
 class CategoriaProdutoUpdateView( UpdateView):

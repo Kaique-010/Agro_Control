@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
-from companies.models import Branches, Enterprise
+from companies.models import Branch, Enterprise
 
 
 
 class BaseModel(models.Model):
     empresa = models.ForeignKey(Enterprise, on_delete=models.CASCADE, db_index=True)
-    filial = models.ForeignKey(Branches, on_delete=models.CASCADE, null=True, blank=True, db_index=True)
+    filial = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, db_index=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
     atualizado_por = models.ForeignKey(
