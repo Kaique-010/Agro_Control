@@ -125,6 +125,8 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Menu/static'),
+    os.path.join(BASE_DIR, 'accounts/static'),
+
 
 ]
 
@@ -143,3 +145,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_USER_MODEL = 'accounts.User' 
+
+LOGOUT_REDIRECT =  'login'

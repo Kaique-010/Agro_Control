@@ -1,0 +1,83 @@
+/* 🎨 Cores principais */
+:root {
+  --azul-anil: #0a1f44;
+  --azul-claro: #1e3a8a;
+  --azul-hover: #3b82f6;
+  --branco: #ffffff;
+  --cinza-claro: #f8f9fa;
+}
+
+/* 🌍 Estilo geral da Navbar */
+.navbar {
+  background-color: var(--azul-anil) !important;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--branco) !important;
+}
+
+/* 🔲 Botão do Menu */
+.navbar-toggler {
+  border: none;
+  background-color: var(--azul-claro);
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.navbar-toggler i {
+  color: var(--branco);
+}
+
+.navbar-toggler:hover {
+  background-color: var(--azul-hover);
+}
+
+/* 📌 Menu Lateral */
+.offcanvas {
+  background-color: var(--azul-anil);
+}
+
+.offcanvas-title {
+  color: var(--branco);
+}
+
+.offcanvas-body {
+  padding-top: 15px;
+}
+
+/* 🎯 Links do Menu */
+.nav-link {
+  color: var(--branco) !important;
+  font-size: 1.2rem;
+  padding: 10px;
+}
+
+.nav-link:hover {
+  background-color: var(--azul-hover);
+  border-radius: 5px;
+}
+
+/* 🔘 Botão de Logout */
+.btn-danger {
+  background-color: #b91c1c;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* 🏛️ Rodapé */
+footer {
+  color: var(--azul-anil);
+  font-weight: bold;
+}
+
+/* Aplicar gradiente ao fundo */
+body {
+  background: linear-gradient(#38384e, #8b979c);
+  height: 100vh; /* Adiciona altura para o corpo */
+  margin: 0; /* Remove margem padrão do body */
+}

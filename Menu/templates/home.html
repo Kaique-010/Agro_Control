@@ -3,6 +3,11 @@
 {% block title %}Home - Agro Control{% endblock %}
 
 {% block content %}
-<h1 style="color: antiquewhite;">Olá {{usuario.nome}} Bem-vindo ao Agro Control</h1>
-<p style="color: antiquewhite;">Gerencie de forma Eficiente!</p>
+{% if user.is_authenticated %}
+    <h5 style="color: antiquewhite;">Olá {{ user.name }}, Bem-vindo ao Agro Control</h5>
+{% else %}
+    <h1 style="color: antiquewhite;">Olá, visitante! Faça login para acessar.</h1>
+{% endif %}
+<p style="color: antiquewhite;">Gerencie de forma eficiente!</p>
+
 {% endblock %}

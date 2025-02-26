@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login 
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.views import LogoutView
 from .forms import CustomLoginForm
 
 def login_view(request):

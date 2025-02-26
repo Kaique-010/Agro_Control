@@ -34,6 +34,10 @@
   background-color: var(--azul-hover);
 }
 
+.navbar a {
+  color: antiquewhite;
+}
+
 /* 📌 Menu Lateral */
 .offcanvas {
   background-color: var(--azul-anil);
@@ -80,4 +84,47 @@ body {
   background: linear-gradient(#38384e, #8b979c);
   height: 100vh; /* Adiciona altura para o corpo */
   margin: 0; /* Remove margem padrão do body */
+}
+
+/* Ajuste no rodapé */
+
+.footer {
+  text-align: center;
+  margin-bottom: 25%;
+}
+
+.footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.footer a {
+  text-decoration: none;
+  color: antiquewhite;
+}
+
+.bi-facebook {
+  color: #3b5998;
+}
+
+.bi-twitter {
+  color: #00acee;
+}
+
+.bi-instagram {
+  color: #e4405f;
+}
+
+.bi-linkedin {
+  color: #0e76a8;
+}
+
+.social-icon:hover i {
+  color: #ffb121;
+  /* Cor ao passar o mouse */
 }

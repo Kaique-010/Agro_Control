@@ -1,7 +1,7 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 
-
+@login_required
 def Menu(request):
-    'Hello World'
-    return render(request, 'home.html')
+    return render(request, "home.html", {"user": request.user})
