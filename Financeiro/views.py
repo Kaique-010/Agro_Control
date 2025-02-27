@@ -15,7 +15,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 import openpyxl
-from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, Categorias, GerarParcela, CentroDeCusto
+from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, CategoriasFinanceiro, GerarParcela, CentroDeCusto
 from .forms import ContaAPagarForm, ContaAReceberForm, DateRangeForm, CategoriaForm, FormasPagamentoForm, FormasRecebimentoForm, GerarParcelasForm, CentroDeCustoForm
 from django.shortcuts import redirect, render
 from django.db.models import Sum
@@ -31,7 +31,7 @@ class ContaAPagarListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        self.set_empresa()  # Configura o banco de dados
+       
         queryset = super().get_queryset()
         
         descricao = self.request.GET.get('descricao')
@@ -71,7 +71,7 @@ class ContaAPagarDetailView(DetailView):
     context_object_name = 'conta_a_pagar'
 
     def get_object(self):
-        self.set_empresa()  
+        
         return super().get_object()
 
 
@@ -135,7 +135,7 @@ class ContaAReceberListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        self.set_empresa() 
+       
         queryset = super().get_queryset()
         
         descricao = self.request.GET.get('descricao')
@@ -452,6 +452,7 @@ class FormaRecebimentoCreateView(CreateView):
         
     
         form.instance.empresa = self.request.user.empresa
+        form.instance.user = self.request.user
         
         return super().form_valid(form)
 
@@ -526,6 +527,7 @@ class FormaPagamentoCreateView(CreateView):
         
     
         form.instance.empresa = self.request.user.empresa
+        form.instance.user = self.request.user
 
         
         return super().form_valid(form)
@@ -559,13 +561,13 @@ class FormaPagamentoDeleteView(DeleteView):
 
 
 class CategoriaListView(ListView):
-    model = Categorias
-    template_name = 'categorias_list.html'
+    model = CategoriasFinanceiro
+    template_name = 'categoriasfinanceiro_lista.html'
     context_object_name = 'categorias'
     paginate_by = 10
 
     def get_queryset(self):
-        self.set_empresa()  # Configura o banco de dados
+        
         queryset = super().get_queryset()
         descricao = self.request.GET.get('descricao')
         
@@ -576,20 +578,20 @@ class CategoriaListView(ListView):
 
 
 class CategoriaDetailView(DetailView):
-    model = Categorias
-    template_name = 'categorias_detail.html'
+    model = CategoriasFinanceiro
+    template_name = 'categoriasfinanceiro_detail.html'
     context_object_name = 'categoria'
 
     def get_object(self):
-        self.set_empresa()  
+
         return super().get_object()
 
 
 class CategoriaCreateView(CreateView):
-    model = Categorias
-    template_name = 'categorias_form.html'
+    model = CategoriasFinanceiro
+    template_name = 'categoriasfinanceiro_form.html'
     form_class = CategoriaForm
-    success_url = reverse_lazy('categorias_list')
+    success_url = reverse_lazy('categoriasfinanceiro_list')
 
     def form_valid(self, form):
         
@@ -608,10 +610,10 @@ class CategoriaCreateView(CreateView):
 
 
 class CategoriaUpdateView(UpdateView):
-    model = Categorias
-    template_name = 'categorias_form.html'
+    model = CategoriasFinanceiro
+    template_name = 'categoriasfinanceiro_form.html'
     form_class = CategoriaForm
-    success_url = reverse_lazy('categorias_list')
+    success_url = reverse_lazy('categoriasfinanceiro_list')
 
     def form_valid(self, form):
         
@@ -629,9 +631,9 @@ class CategoriaUpdateView(UpdateView):
 
 
 class CategoriaDeleteView(DeleteView):
-    model = Categorias
-    template_name = 'categorias_confirm_delete.html'
-    success_url = reverse_lazy('categorias_list')
+    model = CategoriasFinanceiro
+    template_name = 'categoriasfinanceiro_confirm_delete.html'
+    success_url = reverse_lazy('categoriasfinanceiro_list')
 
 
 
@@ -644,7 +646,7 @@ class GerarParcelasView(FormView):
 
     def form_valid(self, form):
         # Configurar o banco de dados com base na empresa
-        self.set_empresa()
+
 
         # Verificar se o usuário tem empresa associada
         if not self.request.user.empresa:

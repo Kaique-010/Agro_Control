@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .container {
+    margin-top: 25px;
+    color: antiquewhite;
+  }
+  .container button {
+    background-color: cadetblue;
+    padding: 10px 15px; /* Ajustado */
+    border-radius: 5px;
+    width: 100px;
+    height: 40px; /* Ajustado */
+    border: none;
+    cursor: pointer;
+  }
+
+  .container button:hover {
+    background-color: aqua;
+    color: rgb(253, 169, 84);
+  }
+</style>
+<div class="container">
+  <h1>{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Categoria</h1>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <div style="display: flex; gap: 10px" ;>
+      <button type="submit">Salvar</button>
+      <a href="{% url 'categoriasfinanceiro_list' %}" class="btn btn-danger"
+        >Voltar à lista</a
+      >
+    </div>
+  </form>
+</div>
+{% endblock %}

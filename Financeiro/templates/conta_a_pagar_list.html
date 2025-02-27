@@ -12,6 +12,7 @@ Contas a Pagar
     h3 {
         color: rgb(225, 211, 193);
         text-align: center;
+        margin-top: 25px;
     }
 
     th,
@@ -45,15 +46,13 @@ Contas a Pagar
         color: rgb(255, 255, 255);
     }
 </style>
-<div class="container-fluid">
-    <!-- Header Card -->
-    <div class="card mb-4" style="background-color: rgb(28, 33, 35);">
-        <div class="card-body text-center">
+<div class="container">
+            <center>
             <h3>Contas a Pagar</h3>
             <i class="bi bi-graph-down-arrow" style="font-size: 2rem; color: rgb(196, 85, 85);"></i>
+            </center>
         </div>
-    </div>
-
+   
     <!-- Action Button -->
     <div class="mb-4">
         <a href="{% url 'conta_a_pagar_create' %}" class="btn btn-success float-end">
@@ -105,15 +104,15 @@ Contas a Pagar
 
     <!-- Data Table -->
     <div class="table-responsive">
-        <table class="table table-striped table-dark table-bordered">
+        <table class="table table-striped table-white table-bordered">
             <thead>
                 <tr>
-                    <th><a href="?sort_by=id" class="text-light">ID</a></th>
-                    <th><a href="?sort_by=descricao" class="text-light">Descrição</a></th>
-                    <th><a href="?sort_by=valor" class="text-light">Valor</a></th>
-                    <th><a href="?sort_by=data_emissao" class="text-light">Emissão</a></th>
-                    <th><a href="?sort_by=data_vencimento" class="text-light">Vencimento</a></th>
-                    <th><a href="?sort_by=status_pagamento" class="text-light">Status</a></th>
+                    <th><a href="?sort_by=id" class="text-dark-emphasis">ID</a></th>
+                    <th><a href="?sort_by=descricao" class="text-dark-emphasis">Descrição</a></th>
+                    <th><a href="?sort_by=valor" class="text-dark-emphasis">Valor</a></th>
+                    <th><a href="?sort_by=data_emissao" class="text-dark-emphasis">Emissão</a></th>
+                    <th><a href="?sort_by=data_vencimento" class="text-dark-emphasis">Vencimento</a></th>
+                    <th><a href="?sort_by=status_pagamento" class="text-dark-emphasis">Status</a></th>
                     <th>Ações</th>
                 <tr>
             </thead>
@@ -169,7 +168,7 @@ Contas a Pagar
     </div>
 
     <!-- Pagination -->
-    {% include 'parcials/pagination.html' %}
+
 
         {% endblock %}
 

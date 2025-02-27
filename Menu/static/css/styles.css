@@ -73,24 +73,12 @@
   background-color: #dc2626;
 }
 
-/* 🏛️ Rodapé */
-footer {
-  color: var(--azul-anil);
-  font-weight: bold;
-}
-
 /* Aplicar gradiente ao fundo */
-body {
-  background: linear-gradient(#38384e, #8b979c);
-  height: 100vh; /* Adiciona altura para o corpo */
-  margin: 0; /* Remove margem padrão do body */
-}
 
 /* Ajuste no rodapé */
 
 .footer {
   text-align: center;
-  margin-bottom: 25%;
 }
 
 .footer ul {
@@ -128,3 +116,5 @@ body {
   color: #ffb121;
   /* Cor ao passar o mouse */
 }
+
+

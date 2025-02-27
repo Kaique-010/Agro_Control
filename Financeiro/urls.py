@@ -41,10 +41,10 @@ urlpatterns = [
     path('formas-recebimento/excluir/<int:pk>/', FormaRecebimentoDeleteView.as_view(), name='formas_recebimento_confirm_delete'),
 
     # URLs para Categorias
-    path('categorias/', CategoriaListView.as_view(), name='categorias_list'),
-    path('categorias/novo/', CategoriaCreateView.as_view(), name='categorias_create'),
-    path('categorias/editar/<int:pk>/', CategoriaUpdateView.as_view(), name='categorias_update'),
-    path('categorias/excluir/<int:pk>/', CategoriaDeleteView.as_view(), name='categorias_confirm_delete'),
+    path('categoriasfinanceiro/', CategoriaListView.as_view(), name='categoriasfinanceiro_list'),
+    path('categoriasfinanceiro/novo/', CategoriaCreateView.as_view(), name='categoriasfinanceiro_create'),
+    path('categoriasfinanceiro/editar/<int:pk>/', CategoriaUpdateView.as_view(), name='categoriasfinanceiro_update'),
+    path('categoriasfinanceiro/excluir/<int:pk>/', CategoriaDeleteView.as_view(), name='categoriasfinanceiro_confirm_delete'),
     
     path("gerar-parcelas/", GerarParcelasView.as_view(), name="gerar_parcelas"),
     path("parcelas/", ParcelasListView.as_view(), name="parcelas_geradas"),

@@ -1,5 +1,5 @@
 from django import forms
-from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, Categorias, CentroDeCusto
+from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, CategoriasFinanceiro, CentroDeCusto
 from .models import GerarParcela
 
 
@@ -36,7 +36,7 @@ class ContaAPagarForm(BaseForm):
             'data_pagamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'pessoas': forms.Select(attrs={'class': 'form-control'}),
             'categorias': forms.Select(attrs={'class': 'form-control'}),
-            'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações','rows': 3}),
+            'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações','rows': 1}),
             'forma_pagamento': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -57,7 +57,7 @@ class ContaAReceberForm(BaseForm):
             'data_recebimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'pessoas': forms.Select(attrs={'class': 'form-control'}),
             'categorias': forms.Select(attrs={'class': 'form-control'}),
-            'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações'}),
+            'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações', 'rows':1}),
             'forma_recebimento': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -77,15 +77,15 @@ class DateRangeForm(BaseForm):
 
 class CategoriaForm(BaseForm):
     class Meta:
-        model = Categorias
+        model = CategoriasFinanceiro
         fields = ['descricao'] 
 
     
-    descricao = forms.CharField(max_length=255, required=False, label='Descrição', widget=forms.Textarea(attrs={'class': 'form-control'}))
+    descricao = forms.CharField(max_length=255, required=False, label='Descrição', widget=forms.Textarea(attrs={'class': 'form-control', 'rows':1}))
 
     def clean_nome(self):
         nome = self.cleaned_data['descricao']
-        if Categorias.objects.filter(descricao='descricao').exists():
+        if CategoriasFinanceiro.objects.filter(descricao='descricao').exists():
             raise forms.ValidationError("Esta categoria já existe.")
         return nome
 
@@ -95,7 +95,7 @@ class FormasRecebimentoForm(BaseForm):
         model = FormasRecebimento
         fields = ['descricao']  
 
-    descricao = forms.CharField(max_length=255, label='Descrição', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    descricao = forms.CharField(max_length=255, label='Descrição', widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 1}))
 
     def clean_descricao(self):
         descricao = self.cleaned_data['descricao']

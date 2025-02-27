@@ -59,7 +59,7 @@ class FormasPagamento(Base):
         ordering = ['criado', 'id']
         db_table = 'formaspagamento'
 
-class Categorias(Base):
+class CategoriasFinanceiro(Base):
     descricao = models.CharField('Descrição', max_length=100)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
        
@@ -67,7 +67,7 @@ class Categorias(Base):
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
         ordering = ['criado', 'id']
-        db_table = 'categorias'
+        db_table = 'categoriasfinanceiro'
     
     def __str__(self):
         return self.descricao
@@ -83,7 +83,7 @@ class ContaAPagar(Base):
     data_pagamento = models.DateField('Data de Pagamento', null=True, blank=True)
     status_pagamento = models.BooleanField('Status de Pagamento',default=False)
     pessoas = models.ForeignKey(Pessoas, on_delete=models.PROTECT, related_name='contas_a_pagar')
-    categorias = models.ForeignKey(Categorias, on_delete= models.PROTECT, max_length=100)
+    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
     observacoes = models.TextField('Observações',null=True, blank=True)
     forma_pagamento = models.ForeignKey(FormasPagamento, on_delete=models.SET_NULL, null=True, blank=True)
     
@@ -111,7 +111,7 @@ class ContaAReceber(Base):
     data_recebimento = models.DateField('Data de Recebimento', null=True, blank=True)
     status_recebimento = models.BooleanField(default=False)
     pessoas = models.ForeignKey(Pessoas, on_delete=models.CASCADE, related_name='contas_a_receber')
-    categorias = models.ForeignKey(Categorias, on_delete= models.PROTECT, max_length=100)
+    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
     observacoes = models.TextField('Observações',null=True, blank=True)
     forma_recebimento = models.ForeignKey(FormasRecebimento, on_delete=models.SET_NULL, null=True, blank=True)
     

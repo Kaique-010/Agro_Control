@@ -1,11 +1,37 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<style>
+  .container {
+    margin-top: 25px;
+    color: antiquewhite;
+  }
+  .container button {
+    background-color: cadetblue;
+    padding: 10px 15px; /* Ajustado */
+    border-radius: 5px;
+    width: 100px;
+    height: 40px; /* Ajustado */
+    border: none;
+    cursor: pointer;
+  }
 
-{% block content %}
-<h1>{% if form.instance.pk %}Editar{% else %}Nova{% endif %} Forma de Pagamento</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
-</form>
-<a href="{% url 'formas_pagamento_list' %}">Voltar à lista</a>
+  .container button:hover {
+    background-color: aqua;
+    color: rgb(253, 169, 84);
+  }
+</style>
+<div class="container">
+  <h1>
+    {% if form.instance.pk %}Editar{% else %}Nova{% endif %} Forma de Pagamento
+  </h1>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <div style="display: flex; padding: 5px; gap: 10px">
+      <button type="submit">Salvar</button>
+      <a href="{% url 'formas_pagamento_list' %}" class="btn btn-danger"
+        >Voltar à lista</a
+      >
+    </div>
+  </form>
+</div>
+
 {% endblock %}

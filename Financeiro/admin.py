@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FormasPagamento, FormasRecebimento, ContaAPagar, ContaAReceber, Categorias, CentroDeCusto
+from .models import FormasPagamento, FormasRecebimento, ContaAPagar, ContaAReceber, CategoriasFinanceiro, CentroDeCusto
 
 class FormasPagamentoAdmin(admin.ModelAdmin):
     list_display = ('id','descricao',)
@@ -41,7 +41,7 @@ class CentroDeCustoAdmin(admin.ModelAdmin):
 
 admin.site.register(FormasPagamento, FormasPagamentoAdmin)
 admin.site.register(FormasRecebimento, FormasRecebimentoAdmin)
-admin.site.register(Categorias, CategoriaAdmin)
+admin.site.register(CategoriasFinanceiro, CategoriaAdmin)
 admin.site.register(ContaAPagar, ContasAPagarAdmin)
 admin.site.register(ContaAReceber, ContasAReceberAdmin)
 admin.site.register(CentroDeCusto, CentroDeCustoAdmin)
