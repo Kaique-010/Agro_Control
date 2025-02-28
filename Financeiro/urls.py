@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
-    AtualizarValorPagoView, CadastrarCentroDeCusto, ContaAPagarListView, ContaAPagarDetailView, ContaAPagarCreateView, ContaAPagarUpdateView, ContaAPagarDeleteView,
-    ContaAReceberListView, ContaAReceberDetailView, ContaAReceberCreateView, ContaAReceberUpdateView, ContaAReceberDeleteView, EditarParcelaView, ExcluirParcelaView, ListarCentrosDeCusto, ParcelasListView, fluxo_caixa, dash,exportar_contaapagar_excel, exportar_contaareceber_excel, GerarParcelasView, ParcelasListView
+    AtualizarValorPagoView, CadastrarCentroDeCusto, CadastrarPlanoDeContas, ContaAPagarListView, ContaAPagarDetailView, ContaAPagarCreateView, ContaAPagarUpdateView, ContaAPagarDeleteView,
+    ContaAReceberListView, ContaAReceberDetailView, ContaAReceberCreateView, ContaAReceberUpdateView, ContaAReceberDeleteView, DeletarCentrosDeCustos, DeletarPlanoDeContas, DetalhesCentroDeCusto, DetalhesPlanoDeContas, EditarCentrosDeCustos, EditarParcelaView, EditarPlanoDeContas, ExcluirParcelaView, ListarCentrosDeCusto, ListarPlanoDeContas, ParcelasListView, fluxo_caixa, dash,exportar_contaapagar_excel, exportar_contaareceber_excel, GerarParcelasView, ParcelasListView
 )
 from Financeiro.views import (
     FormaPagamentoListView, FormaPagamentoCreateView, FormaPagamentoUpdateView, FormaPagamentoDeleteView,
@@ -50,9 +50,19 @@ urlpatterns = [
     path("parcelas/", ParcelasListView.as_view(), name="parcelas_geradas"),
     path("atualizar-valor-pago/", AtualizarValorPagoView.as_view(), name="atualizar_valor_pago"),
     path('excluir/<int:pk>/', ExcluirParcelaView.as_view(), name='excluir_parcela'),
-     path('editar/<int:pk>/', EditarParcelaView.as_view(), name='editar_parcela'),
+    path('editar/<int:pk>/', EditarParcelaView.as_view(), name='editar_parcela'),
      
     #Centros de Custos 
     path('cclistar', ListarCentrosDeCusto.as_view(), name='listar_centros_de_custo'),
     path('cccadastrar/', CadastrarCentroDeCusto.as_view(), name='cadastrar_centro_de_custo'),
+    path('cceditar/<int:pk>/', EditarCentrosDeCustos.as_view(), name='editar_centro_de_custos'),
+    path('ccdetalhe/<int:pk>/', DetalhesCentroDeCusto.as_view(), name='detalhe_centro_de_custo'),
+    path('ccexcluir/<int:pk>/', DeletarCentrosDeCustos.as_view(), name='deletar_centro_de_custo'),
+    
+    
+    path('planos/', ListarPlanoDeContas.as_view(), name='planos_listar'),
+    path('planos/cadastrar/', CadastrarPlanoDeContas.as_view(), name='planos_cadastrar'),
+    path('planos/editar/<int:pk>/', EditarPlanoDeContas.as_view(), name='planos_editar'),
+    path('planos/detalhes/<int:pk>/', DetalhesPlanoDeContas.as_view(), name='planos_detalhes'),
+    path('planos/excluir/<int:pk>/', DeletarPlanoDeContas.as_view(), name='planos_excluir'),
 ]

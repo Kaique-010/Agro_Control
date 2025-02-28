@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .btn-secondary {
+        background-color: rgb(39, 193, 199);
+        color: rgb(255, 255, 255);
+    }
+</style>
+
+<center>
+    <h3>Detalhes do Plano de Contas</h3>
+    <i class="bi bi-calculator" style="font-size: 2rem;"></i>
+</center>
+
+<div class="container">
+    <div class="row mb-4"></div>
+    <a href="{% url 'planos_listar' %}" class="btn btn-secondary mb-3">
+        Voltar para a lista de Planos de Contas
+    </a>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ object.nome }}</h5>
+            <p><strong>Código:</strong> {{ object.codigo }}</p>
+            <p><strong>Tipo:</strong> {{ object.get_tipo_display }}</p>
+            <p><strong>Movimento:</strong> {{ object.get_movimento_display }}</p>
+            <p><strong>Resumo:</strong> {% if object.resumido %}{{ object.resumido.nome }}{% else %}Não resumido{% endif %}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Centro de Custo{% endblock %}
+
+{% block content %}
+  <h1>Detalhes do Centro de Custo: {{ object.nome }}</h1>
+  
+  <table>
+    <tr>
+      <th>Código</th>
+      <td>{{ object.codigo }}</td>
+    </tr>
+    <tr>
+      <th>Tipo</th>
+      <td>{{ object.tipo }}</td>
+    </tr>
+    <tr>
+      <th>Movimento</th>
+      <td>{{ object.movimento }}</td>
+    </tr>
+    <tr>
+      <th>Resumido</th>
+      <td>{{ object.pai }}</td>
+    </tr>
+  </table>
+
+  <a href="{% url 'editar_centro_de_custos' object.pk %}">Editar</a> | 
+  <a href="{% url 'deletar_centro_de_custo' object.pk %}">Excluir</a> |
+  <a href="{% url 'listar_centros_de_custo' %}">Voltar para a lista</a>
+{% endblock %}

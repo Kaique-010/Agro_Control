@@ -61,7 +61,7 @@ class ContaAReceberForm(BaseForm):
             'forma_recebimento': forms.Select(attrs={'class': 'form-control'}),
         }
 
-class DateRangeForm(BaseForm):
+class DateRangeForm(forms.Form):
     start_date = forms.DateField(label='Data Inicial', widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(label='Data Final', widget=forms.DateInput(attrs={'type': 'date'}))
     
@@ -167,3 +167,36 @@ class CentroDeCustoForm(BaseForm):
         
         # Limitar a seleção de filhos para os centros de custo que já são filhos de um pai
         self.fields['filho'].queryset = CentroDeCusto.objects.filter(pai__isnull=False)  # Filhos (centros de custo filhos)
+
+
+
+
+from django import forms
+from .models import PlanoDeContas
+
+class PlanoDeContasForm(forms.ModelForm):
+    class Meta:
+        model = PlanoDeContas
+        fields = ['nome', 'tipo', 'movimento', 'resumido']  # Defina os campos que deseja exibir no formulário
+        widgets = {
+            'tipo': forms.Select(choices=PlanoDeContas.TIPOS_CONTA),
+            'movimento': forms.Select(choices=PlanoDeContas.MOVIMENTACAO),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Customize widgets, labels, etc., se necessário
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        tipo = cleaned_data.get('tipo')
+        movimento = cleaned_data.get('movimento')
+
+        # Verifique se o movimento está correto com base no tipo
+        if tipo in ['ativos', 'despesas'] and movimento != 'debito':
+            self.add_error('movimento', 'Para Ativos e Despesas, o movimento deve ser Débito.')
+        elif tipo in ['passivos', 'receitas'] and movimento != 'credito':
+            self.add_error('movimento', 'Para Passivos e Receitas, o movimento deve ser Crédito.')
+
+        return cleaned_data

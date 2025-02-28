@@ -1,0 +1,36 @@
+ccexcluir.html{% extends 'base.html' %}
+
+{% block title %}Excluir Centro de Custo{% endblock %}
+
+{% block content %}
+  <h1>Tem certeza que deseja excluir o centro de custo "{{ object.nome }}"?</h1>
+  
+  <table>
+    <tr>
+      <th>Código</th>
+      <td>{{ object.codigo }}</td>
+    </tr>
+    <tr>
+      <th>Tipo</th>
+      <td>{{ object.tipo }}</td>
+    </tr>
+    <tr>
+      <th>Movimento</th>
+      <td>{{ object.movimento }}</td>
+    </tr>
+    <tr>
+      <th>Empresa</th>
+      <td>{{ object.empresa.nome }}</td>
+    </tr>
+    <tr>
+      <th>Resumido</th>
+      <td>{{ object.pai }}</td>
+    </tr>
+  </table>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a href="{% url 'listar_centros_de_custo' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

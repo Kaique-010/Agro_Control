@@ -27,7 +27,8 @@
     .bi-eye {
         color: azure;
     }
-    .bi-calculator{
+
+    .bi-calculator {
         color: aliceblue;
     }
 
@@ -48,18 +49,16 @@
     }
 </style>
 
-
-
 <center>
-    <h3>Centros de Custos</h3>
+    <h3>Planos de Contas</h3>
     <i class="bi bi-calculator" style="font-size: 2rem;"></i>
 </center>
 
 <div class="container">
     <div class="col md-4">
         <div class="row mb-4"></div>
-        <a href="{% url 'cadastrar_centro_de_custo' %}" class="btn btn-success float-end">
-            <i class="bi bi-plus"></i> Novo Centro de Custo
+        <a href="{% url 'planos_cadastrar' %}" class="btn btn-success float-end">
+            <i class="bi bi-plus"></i> Novo Plano de Contas
         </a>
     </div>
 
@@ -71,36 +70,27 @@
                     <th>Código</th>
                     <th>Nome</th>
                     <th>Tipo</th>
-                    <th>Resumo</th>
+                    <th>Movimento</th>
                 </tr>
             </thead>
             <tbody>
-                {% for centro in centros %}
+                {% for plano in planos %}
                 <tr>
                     <td>
-                        <a href="{% url 'detalhe_centro_de_custo'  centro.pk %}" class="btn btn-info btn-sm" title="Detalhes" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'planos_detalhes' plano.pk %}" class="btn btn-info btn-sm" title="Detalhes" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{% url 'editar_centro_de_custos'  centro.pk %}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'planos_editar' plano.pk %}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <a href="{% url 'deletar_centro_de_custo'  centro.pk %}" class="btn btn-danger btn-sm" title="Excluir" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'planos_excluir' plano.pk %}" class="btn btn-danger btn-sm" title="Excluir" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
-                    <td>{{ centro.codigo }}</td>
-                    <td>{{ centro.nome }}</td>
-                    <td>{{ centro.get_tipo_display }}</td>
-                    <td>
-                        {% if centro.pai %}
-                        {{ centro.pai.nome }}
-                        {% else %}
-                        Resumido
-                        {% endif %}
-                    </td>
+                    <td>{{ plano.codigo }}</td>
+                    <td>{{ plano.nome }}</td>
+                    <td>{{ plano.get_tipo_display }}</td>
+                    <td>{{ plano.get_movimento_display }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

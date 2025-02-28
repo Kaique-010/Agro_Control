@@ -15,8 +15,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 import openpyxl
-from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, CategoriasFinanceiro, GerarParcela, CentroDeCusto
-from .forms import ContaAPagarForm, ContaAReceberForm, DateRangeForm, CategoriaForm, FormasPagamentoForm, FormasRecebimentoForm, GerarParcelasForm, CentroDeCustoForm
+from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimento, CategoriasFinanceiro, GerarParcela, CentroDeCusto, PlanoDeContas
+from .forms import ContaAPagarForm, ContaAReceberForm, DateRangeForm, CategoriaForm, FormasPagamentoForm, FormasRecebimentoForm, GerarParcelasForm, CentroDeCustoForm, PlanoDeContasForm
 from django.shortcuts import redirect, render
 from django.db.models import Sum
 from datetime import date, datetime, timedelta
@@ -820,6 +820,88 @@ class CadastrarCentroDeCusto(CreateView):
     template_name = 'cccadastrar.html'  
     success_url = reverse_lazy('listar_centros_de_custo')  
 
+    def form_valid(self, form):
+        # Preenche o campo empresa com a empresa do usuário logado
+        form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
+        return super().form_valid(form)
+
+class EditarCentrosDeCustos(UpdateView):
+    model = CentroDeCusto
+    form_class = CentroDeCustoForm
+    template_name =  'cccadastrar.html' 
+    success_url = reverse_lazy('listar_centros_de_custo')  
+
+    def form_valid(self, form):
+        # Preenche o campo empresa com a empresa do usuário logado
+        form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
+        return super().form_valid(form)
+    
+
+class DetalhesCentroDeCusto(DetailView):
+    model = CentroDeCusto
+    template_name = 'ccdetail.html'
+    context_object_name = 'object'  # Para garantir que o contexto use 'object' como chave
+
+
+    
+
+
+class DeletarCentrosDeCustos(DeleteView):
+    model = CentroDeCusto
+    template_name =  'ccexcluir.html' 
+    success_url = reverse_lazy('listar_centros_de_custo')  
+    
+    def form_valid(self, form):
+        # Preenche o campo empresa com a empresa do usuário logado
+        form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
+        return super().form_valid(form)
+    
+
+
+class ListarPlanoDeContas(ListView):
+    model = PlanoDeContas
+    template_name = 'planos_listar.html'  
+    context_object_name = 'planos'  
+
+
+
+class CadastrarPlanoDeContas(CreateView):
+    model = PlanoDeContas
+    form_class = PlanoDeContasForm
+    template_name = 'planocadastrar.html'  
+    success_url = reverse_lazy('planos_listar')  
+
+    def form_valid(self, form):
+        # Preenche o campo empresa com a empresa do usuário logado
+        form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
+        return super().form_valid(form)
+
+class EditarPlanoDeContas(UpdateView):
+    model = PlanoDeContas
+    form_class = PlanoDeContasForm
+    template_name =  'planocadastrar.html' 
+    success_url = reverse_lazy('planos_listar')  
+
+    def form_valid(self, form):
+        # Preenche o campo empresa com a empresa do usuário logado
+        form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
+        return super().form_valid(form)
+    
+
+class DetalhesPlanoDeContas(DetailView):
+    model = CentroDeCusto
+    template_name = 'plano_detail.html'
+    context_object_name = 'object'  
+
+
+    
+
+
+class DeletarPlanoDeContas(DeleteView):
+    model = PlanoDeContas
+    template_name =  'plano_excluir.html' 
+    success_url = reverse_lazy('planos_listar')  
+    
     def form_valid(self, form):
         # Preenche o campo empresa com a empresa do usuário logado
         form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
