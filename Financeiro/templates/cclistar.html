@@ -10,44 +10,37 @@
         margin-top: 50px;
     }
 
-    th,
-    td {
+    th, td {
         text-align: center;
         padding: 10px;
     }
 
-    .bi-pencil {
-        color: rgb(255, 255, 255);
-    }
-
-    .bi-trash {
-        color: rgb(247, 246, 246);
-    }
-
-    .bi-eye {
-        color: azure;
-    }
-    .bi-calculator{
-        color: aliceblue;
-    }
-
-    .bi-person-check {
-        align-items: center;
-        color: aquamarine;
-    }
+    .bi-pencil { color: white; }
+    .bi-trash { color: white; }
+    .bi-eye { color: azure; }
+    .bi-calculator { color: aliceblue; }
 
     .btn-warning {
         background-color: darksalmon;
     }
 
-    .btn-success,
-    .btn-primary {
+    .btn-success, .btn-primary {
         background-color: rgb(39, 193, 199);
-        color: rgb(255, 255, 255);
+        color: white;
         margin-bottom: 25px;
     }
-</style>
 
+    @media (max-width: 768px) {
+        th, td {
+            font-size: 13px; /* Reduz tamanho da fonte */
+            padding: 5px; /* Reduz padding */
+        }
+        .btn {
+            font-size: 12px; /* Diminui botões */
+            padding: 5px 10px;
+        }
+    }
+</style>
 
 
 <center>

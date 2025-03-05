@@ -57,3 +57,29 @@ body {
   width: 120px;
   margin-bottom: 15px;
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .logo {
+    height: 40px;
+    width: 65px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-control {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

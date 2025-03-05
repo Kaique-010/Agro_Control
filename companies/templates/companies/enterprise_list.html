@@ -4,28 +4,26 @@
 
 {% block content %}
 
-<br><br><br>
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}">
 
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <center>
-                <h2 class="mb-4">Lista de Empresas</h2>
-            </center>
+<div class="container">
+
+                <h2>Lista de Empresas</h2>
+
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
             {% endif %}
-            <a href="{% url 'enterprise_create' %}" class="btn btn-success float-end">Nova Empresa</a>
+            <a href="{% url 'enterprise_create' %}" class="btn btn-success-custom mb-4 float-end">Nova Empresa</a>
         </div>
         <div class="container">
             {% if enterprises %}
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
+                    <thead class="thead-white">
                         <tr>
                             <th>Ações</th>
                             <th>ID</th>

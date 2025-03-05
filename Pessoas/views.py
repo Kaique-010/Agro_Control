@@ -44,7 +44,7 @@ class PessoasCreateView(CreateView):
     success_url = reverse_lazy('pessoaslistas')
 
     def form_valid(self, form):
-        # Passa o usuário logado para o form
+        
         self.object = form.save(user=self.request.user)
         cep = form.cleaned_data.get('cep')
         dados_endereco = buscar_cep(cep)

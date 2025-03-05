@@ -1,6 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const statuspagamento = document.getElementById("id_status_pagamento");
+    const modal = new bootstrap.Modal(
+      document.getElementById("pagamentoModal")
+    );
+    const datapagamento = document.getElementById("id_data_pagamento");
+    const form = document.querySelector("form");
+
+    statuspagamento.addEventListener("change", function () {
+      if (this.checked) {
+        modal.show();
+      } else {
+        datapagamento.value = ""; // Limpa a data caso desmarque
+      }
+    });
+
+    document
+      .getElementById("pagamentoModal")
+      .addEventListener("hidden.bs.modal", function () {
+        if (!datapagamento.value) {
+          statuspagamento.checked = false; // Desmarca caso não tenha data
+        }
+      });
+
+    // Antes de submeter o formulário, verifica se precisa preencher a data de pagamento
+    form.addEventListener("submit", function (event) {
+      if (statuspagamento.checked && !datapagamento.value) {
+        event.preventDefault(); // Impede o envio se não houver data
+        alert("Por favor, informe a data de pagamento antes de salvar.");
+        modal.show();
+      }
+    });
+  });
+</script>
 <style>
   .container {
     margin-top: 3%;
@@ -128,10 +163,56 @@
           <label for="forma_pagamento" class="form-label text-white">Forma de Pagamento</label>
           {{ form.forma_pagamento }}
         </div>
+      <div class="col-md-4">
+        <label for="centro_de_custo" class="form-label text-white">Centro de Custos</label>
+        {{ form.centro_de_custo }}
       </div>
+    <div class="col-md-4">
+      <label for="plano_de_contas" class="form-label text-white">Plano de Contas</label>
+      {{ form.plano_de_contas }}
+    </div>
   </div>
+
   <button type="submit" class="btn btn-primary">Salvar</button>
 
   <a href="{% url 'conta_a_pagar_list' %}" class="btn btn-secondary">Voltar</a>
   </form>
+  <div
+      class="modal fade"
+      id="pagamentoModal"
+      tabindex="-1"
+      aria-labelledby="modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Data de pagamento</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <label for="data_pagamento" class="form-label"
+              >Informe a data de pagamento:</label
+            >
+            {{ form.data_pagamento }}
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   {% endblock %}

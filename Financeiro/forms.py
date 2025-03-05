@@ -25,7 +25,7 @@ class ContaAPagarForm(BaseForm):
         model = ContaAPagar
         fields = [ 'status_pagamento','documento', 'descricao', 'parcela', 'valor',
                    'data_emissao', 'data_vencimento', 'data_pagamento', 'pessoas',
-                   'categorias', 'observacoes',  'forma_pagamento']
+                   'categorias', 'observacoes',  'forma_pagamento', 'centro_de_custo', 'plano_de_contas']
         widgets = {
             'documento': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Documento'}),
             'descricao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Descrição'}),
@@ -38,14 +38,25 @@ class ContaAPagarForm(BaseForm):
             'categorias': forms.Select(attrs={'class': 'form-control'}),
             'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações','rows': 1}),
             'forma_pagamento': forms.Select(attrs={'class': 'form-control'}),
+            'centro_de_custo': forms.Select(attrs={'class': 'form-control'}),
+            'plano_de_contas': forms.Select(attrs={'class': 'form-control'}),
         }
+        
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filtra apenas centros de custo do tipo 'Débito' e que são filhos (têm um pai)
+        self.fields["centro_de_custo"].queryset = CentroDeCusto.objects.filter(tipo="debito").exclude(pai__isnull=True)
+        # Filtra apenas planos de contas que não sejam pais (não tenham filhos)
+        self.fields["plano_de_contas"].queryset = PlanoDeContas.objects.filter(expandido__isnull=True)
+
 
 class ContaAReceberForm(BaseForm):
     class Meta:
         model = ContaAReceber
         fields = [ 'status_recebimento','documento', 'descricao', 'parcela', 'valor','data_emissao',
                   'data_vencimento', 'data_recebimento','pessoas', 'categorias', 'observacoes',
-                  'forma_recebimento']
+                  'forma_recebimento',  'centro_de_custo', 'plano_de_contas']
         
         widgets = {
             'documento': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Documento'}),
@@ -59,8 +70,18 @@ class ContaAReceberForm(BaseForm):
             'categorias': forms.Select(attrs={'class': 'form-control'}),
             'observacoes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Observações', 'rows':1}),
             'forma_recebimento': forms.Select(attrs={'class': 'form-control'}),
+            'centro_de_custo': forms.Select(attrs={'class': 'form-control'}),
+            'plano_de_contas': forms.Select(attrs={'class': 'form-control'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filtra apenas centros de custo do tipo 'Crédito' e que são filhos (têm um pai)
+        self.fields["centro_de_custo"].queryset = CentroDeCusto.objects.filter(tipo="credito").exclude(pai__isnull=True)
+        # Filtra apenas planos de contas que não sejam pais (não tenham filhos)
+        self.fields["plano_de_contas"].queryset = PlanoDeContas.objects.filter(expandido__isnull=True)
+            
+            
 class DateRangeForm(forms.Form):
     start_date = forms.DateField(label='Data Inicial', widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(label='Data Final', widget=forms.DateInput(attrs={'type': 'date'}))
@@ -158,7 +179,13 @@ class GerarParcelasForm(BaseForm):
 class CentroDeCustoForm(BaseForm):
     class Meta:
         model = CentroDeCusto
-        fields = ['nome', 'tipo', 'pai', 'filho']  # Adicionando 'filho'
+        fields = ['nome', 'tipo', 'pai', 'filho']  
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+            'tipo': forms.Select(attrs={'class': 'form-control', 'placeholder': 'tipo'}),
+            'pai': forms.Select(attrs={'class': 'form-control', 'placeholder': 'movimento'}),
+            'filho': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Descrição'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -179,9 +206,12 @@ class PlanoDeContasForm(forms.ModelForm):
         model = PlanoDeContas
         fields = ['nome', 'tipo', 'movimento', 'resumido']  # Defina os campos que deseja exibir no formulário
         widgets = {
-            'tipo': forms.Select(choices=PlanoDeContas.TIPOS_CONTA),
-            'movimento': forms.Select(choices=PlanoDeContas.MOVIMENTACAO),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+            'tipo': forms.Select(choices=PlanoDeContas.TIPOS_CONTA, attrs={'class': 'form-control', 'placeholder': 'tipo'}),
+            'movimento': forms.Select(choices=PlanoDeContas.MOVIMENTACAO, attrs={'class': 'form-control', 'placeholder': 'movimento'}),
+            'resumido': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Descrição'}),
         }
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -8,18 +8,15 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}">
 
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <center>
-                <h2 class="mb-4">Lista de Filiais</h2>
-            </center>
+<div class="container">
+            <h2>Lista de Filiais</h2>
+
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
             {% endif %}
-            <a href="{% url 'branch_create' %}" class="btn btn-success float-end">Nova filial</a>
+            <a href="{% url 'branch_create' %}" class="btn btn-success-custom mb-4 float-end">Nova filial</a>
         </div>
         <div class="container">
             {% if branches %}

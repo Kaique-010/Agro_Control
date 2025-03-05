@@ -38,6 +38,10 @@ class FormasRecebimento(Base):
     def __str__(self):
         return self.descricao
 
+    def save(self,*args, **kwargs):
+        self.descricao = self.descricao.upper()
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Forma de Recebimento'
         verbose_name_plural = 'Formas de Recebimento'
@@ -58,6 +62,10 @@ class FormasPagamento(Base):
         verbose_name_plural = 'Formas de Pagamento'
         ordering = ['criado', 'id']
         db_table = 'formaspagamento'
+    
+    def save(self,*args, **kwargs):
+        self.descricao = self.descricao.upper()
+        super().save(*args, **kwargs)
 
 class CategoriasFinanceiro(Base):
     descricao = models.CharField('Descrição', max_length=100)
@@ -71,60 +79,11 @@ class CategoriasFinanceiro(Base):
     
     def __str__(self):
         return self.descricao
-
-
-class ContaAPagar(Base):
-    documento = models.CharField('Documento',max_length=20)
-    descricao = models.CharField('Descrição',max_length=255)
-    parcela = models.IntegerField('Parcelas')
-    valor = models.DecimalField('Valor',max_digits=10, decimal_places=2)
-    data_emissao = models.DateField('Data de Emissão')
-    data_vencimento = models.DateField('Vencimento')
-    data_pagamento = models.DateField('Data de Pagamento', null=True, blank=True)
-    status_pagamento = models.BooleanField('Status de Pagamento',default=False)
-    pessoas = models.ForeignKey(Pessoas, on_delete=models.PROTECT, related_name='contas_a_pagar')
-    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
-    observacoes = models.TextField('Observações',null=True, blank=True)
-    forma_pagamento = models.ForeignKey(FormasPagamento, on_delete=models.SET_NULL, null=True, blank=True)
     
-
-
-    class Meta:
-        verbose_name = 'Conta a Pagar'
-        verbose_name_plural = 'Contas a Pagar'
-        ordering = ['criado', 'id']
-        db_table = 'contaapagar'
-    
-    def __str__(self):
-        return self.descricao
-    
-    
-
-
-class ContaAReceber(Base):
-    documento = models.CharField('Documento',max_length=20)
-    descricao = models.CharField('Descrição',max_length=255)
-    parcela = models.IntegerField('Parcelas')
-    valor = models.DecimalField('Valor',max_digits=10, decimal_places=2)
-    data_emissao = models.DateField('Data de Emissão')
-    data_vencimento = models.DateField('Vencimento')
-    data_recebimento = models.DateField('Data de Recebimento', null=True, blank=True)
-    status_recebimento = models.BooleanField(default=False)
-    pessoas = models.ForeignKey(Pessoas, on_delete=models.CASCADE, related_name='contas_a_receber')
-    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
-    observacoes = models.TextField('Observações',null=True, blank=True)
-    forma_recebimento = models.ForeignKey(FormasRecebimento, on_delete=models.SET_NULL, null=True, blank=True)
-    
-
-    class Meta:
-        verbose_name = 'Conta a Receber'
-        verbose_name_plural = 'Contas a Receber'
-        ordering = ['criado', 'id']
-        db_table = 'contaareceber'
-    
-    def __str__(self):
-        return self.descricao
-    
+    def save(self,*args, **kwargs):
+        self.descricao = self.descricao.upper()
+        super().save(*args, **kwargs)
+   
 
 
 class GerarParcela(Base):
@@ -172,42 +131,37 @@ class CentroDeCusto(Base):
         db_table = 'centrosdecustos'
     
     def save(self, *args, **kwargs):
-        # Lógica para gerar o código hierárquico
-        if self.pai:
-            # Se for um filho, calcular o código com base no pai
-            filhos_count = self.pai.filhos.count() + 1  # Contar quantos filhos o pai tem
-            self.codigo = f"{self.pai.codigo}.{str(filhos_count).zfill(3)}"
+        if not self.codigo:
+            if self.filho:
+                # Se o usuário escolheu um FILHO, o neto será criado abaixo dele
+                self.pai = self.filho  # Define automaticamente o filho como pai
 
-        else:
-            # Para centros de custo raiz, buscar o maior código existente na categoria
-            if self.tipo == 'debito':
-                prefixo = '1'
-            elif self.tipo == 'credito':
-                prefixo = '2'
-            elif self.tipo == 'projetos':
-                prefixo = '3'
-            else:  # Considerando 'Extras'
-                prefixo = '4'
-
-            # Buscar o maior código da categoria
-            max_codigo = CentroDeCusto.objects.filter(codigo__startswith=prefixo).order_by('-codigo').first()
-
-            if max_codigo:
-                try:
-                    ultimo_numero = int(max_codigo.codigo.split('.')[0]) + 1
-                except ValueError:
-                    ultimo_numero = int(prefixo)  # Caso ocorra erro, definir como prefixo inicial
+            if self.pai:
+                ultimo_filho = self.pai.filhos.order_by('-codigo').first()
+                if ultimo_filho:
+                    try:
+                        ultimo_numero = int(ultimo_filho.codigo.split('.')[-1]) + 1
+                    except ValueError:
+                        ultimo_numero = 1
+                else:
+                    ultimo_numero = 1
+                self.codigo = f"{self.pai.codigo}.{str(ultimo_numero).zfill(3)}"
             else:
-                ultimo_numero = int(prefixo)
-
-            self.codigo = str(ultimo_numero)
+                prefixo = {'debito': '1', 'credito': '2', 'projetos': '3', 'extras': '4'}.get(self.tipo, '0')
+                max_codigo = CentroDeCusto.objects.filter(codigo__startswith=prefixo).order_by('-codigo').first()
+                if max_codigo:
+                    try:
+                        ultimo_numero = int(max_codigo.codigo.split('.')[0]) + 1
+                    except ValueError:
+                        ultimo_numero = int(prefixo)
+                else:
+                    ultimo_numero = int(prefixo)
+                self.codigo = str(ultimo_numero)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nome} ({self.codigo})"
-
-
 
 
 class PlanoDeContas(models.Model):
@@ -278,3 +232,61 @@ class PlanoDeContas(models.Model):
 
     def __str__(self):
         return f"{self.codigo} - {self.nome} ({self.movimento})"
+
+
+class ContaAReceber(Base):
+    documento = models.CharField('Documento',max_length=20)
+    descricao = models.CharField('Descrição',max_length=255)
+    parcela = models.IntegerField('Parcelas')
+    valor = models.DecimalField('Valor',max_digits=10, decimal_places=2)
+    data_emissao = models.DateField('Data de Emissão')
+    data_vencimento = models.DateField('Vencimento')
+    data_recebimento = models.DateField('Data de Recebimento', null=True, blank=True)
+    status_recebimento = models.BooleanField(default=False)
+    pessoas = models.ForeignKey(Pessoas, on_delete=models.CASCADE, related_name='contas_a_receber')
+    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
+    observacoes = models.TextField('Observações',null=True, blank=True)
+    forma_recebimento = models.ForeignKey(FormasRecebimento, on_delete=models.SET_NULL, null=True, blank=True)
+    centro_de_custo = models.ForeignKey(CentroDeCusto, on_delete=models.CASCADE, null=True, blank=True, db_column='centro_de_custo')
+    plano_de_contas = models.ForeignKey(PlanoDeContas, on_delete=models.CASCADE, blank=True, null=True, db_column='plano_de_contas')
+    
+    
+
+    class Meta:
+        verbose_name = 'Conta a Receber'
+        verbose_name_plural = 'Contas a Receber'
+        ordering = ['criado', 'id']
+        db_table = 'contaareceber'
+    
+    def __str__(self):
+        return self.descricao
+    
+    
+
+class ContaAPagar(Base):
+    documento = models.CharField('Documento',max_length=20)
+    descricao = models.CharField('Descrição',max_length=255)
+    parcela = models.IntegerField('Parcelas')
+    valor = models.DecimalField('Valor',max_digits=10, decimal_places=2)
+    data_emissao = models.DateField('Data de Emissão')
+    data_vencimento = models.DateField('Vencimento')
+    data_pagamento = models.DateField('Data de Pagamento', null=True, blank=True)
+    status_pagamento = models.BooleanField('Status de Pagamento',default=False)
+    pessoas = models.ForeignKey(Pessoas, on_delete=models.PROTECT, related_name='contas_a_pagar')
+    categorias = models.ForeignKey(CategoriasFinanceiro, on_delete= models.PROTECT, max_length=100)
+    observacoes = models.TextField('Observações',null=True, blank=True)
+    forma_pagamento = models.ForeignKey(FormasPagamento, on_delete=models.SET_NULL, null=True, blank=True)
+    centro_de_custo = models.ForeignKey(CentroDeCusto, on_delete=models.CASCADE, null=True, blank=True, db_column='centro_de_custo')
+    plano_de_contas = models.ForeignKey(PlanoDeContas, on_delete=models.CASCADE, blank=True, null=True, db_column='plano_de_contas')
+    
+
+
+    class Meta:
+        verbose_name = 'Conta a Pagar'
+        verbose_name_plural = 'Contas a Pagar'
+        ordering = ['criado', 'id']
+        db_table = 'contaapagar'
+    
+    def __str__(self):
+        return self.descricao
+    

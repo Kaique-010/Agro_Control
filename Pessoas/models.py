@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-
+from django.utils.timezone import now
 from django.db.models import signals
 from django.template.defaultfilters import slugify
 from stdimage import StdImageField
@@ -11,9 +11,12 @@ from companies.models import Enterprise
 
 class Base(models.Model):
     empresa = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
-    criado = models.DateField('Criado em', auto_now_add=True)
-    modificado = models.DateField('Atualização', auto_now=True)
+    criado = models.DateTimeField('Criado em', auto_now_add=True)  # Remova default=now
+    modificado = models.DateTimeField('Atualização', auto_now=True)  # Remova default=now
     ativo = models.BooleanField('Ativo?', default=True)
+    
+    class Meta:
+        abstract = True
 
 
 class Classificacao(models.TextChoices):
@@ -34,7 +37,6 @@ class Pessoas(Base):
     foto = StdImageField('Imagem', upload_to='pessoas', variations={'thumb': (150, 150)}, blank=True)
     obs = models.TextField('Observações', max_length=100)
     classificacao = models.CharField('Classificação', max_length=20, choices=Classificacao.choices)
-    slug = models.SlugField('Slug', max_length=255, unique=True, blank=True)
     cep = models.CharField(max_length=9, default='00000-000')
     logradouro = models.CharField(max_length=255, blank=True, null=True)
     numero = models.IntegerField(default= 0)

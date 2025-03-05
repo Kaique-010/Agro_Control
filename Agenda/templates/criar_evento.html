@@ -11,17 +11,27 @@
 <style>
     h3{
         text-align: center;
+        color: antiquewhite;
     }
     .form {
         border-width: 2px;
         border-color: none;
-        border-style: none;  /* Estilo da borda, pode ser solid, dashed, etc. */
+        border-style: none;  
+        padding: 15px;
+        margin: 15px;
+
     }
+
+    .form-group {
+    margin-bottom: 15px; /* Espaço entre os campos */
+}
+
     .card {
         border-width: 2px;
         border-color: #5d88b6; /* Cor da borda */
         border-style: solid;
-        background: linear-gradient(#0f0f0f, #53524f); /* Gradiente de fundo */
+        background: linear-gradient(#3D3E52, #53524f); 
+        color: antiquewhite;
     }
 </style>
 
@@ -34,12 +44,67 @@
         <div class="card-body">
             <form method="post" class="form">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="row">
+                    <div class="col-4">
+                      <div class="form-group">
+                        {{ form.data_inicio.label_tag }}
+                        {{ form.data_inicio }}
+                    </div>
+                </div>
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="form-group">
+                        {{ form.data_fim.label_tag }}
+                        {{ form.data_fim }}
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        {{ form.titulo.label_tag }}
+                        {{ form.titulo }}
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-6">
+                      <div class="form-group">
+                        {{ form.horario.label_tag }}
+                        {{ form.horario }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        {{ form.local.label_tag }}
+                        {{ form.local }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    {{ form.descricao.label_tag }}
+                    {{ form.descricao }}
+                </div>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    {{ form.responsavel.label_tag }}
+                    {{ form.responsavel }}
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; padding: 5px; gap: 10px; margin-top: 15px;">
                 <button type="submit" class="btn btn-primary"> Salvar</button>
+                <a href="{% url 'listar_eventos'%}" class="btn btn-secondary mt2">Voltar Para Eventos</a>
+            </div>        
             </form>
         </div>  
     </div>  
-    <a href="{% url 'listar_eventos'%}" class="btn btn-secondary mt2">Voltar Para Eventos</a>
+    
 </div>  
 
 {% endblock %}

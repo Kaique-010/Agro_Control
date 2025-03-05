@@ -19,7 +19,9 @@ from .models import ContaAPagar, ContaAReceber, FormasPagamento, FormasRecebimen
 from .forms import ContaAPagarForm, ContaAReceberForm, DateRangeForm, CategoriaForm, FormasPagamentoForm, FormasRecebimentoForm, GerarParcelasForm, CentroDeCustoForm, PlanoDeContasForm
 from django.shortcuts import redirect, render
 from django.db.models import Sum
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
+from django.utils import timezone
+
 from django.utils.dateparse import parse_date
 
 
@@ -70,9 +72,7 @@ class ContaAPagarDetailView(DetailView):
     template_name = 'conta_a_pagar_detail.html'
     context_object_name = 'conta_a_pagar'
 
-    def get_object(self):
-        
-        return super().get_object()
+
 
 
 class ContaAPagarCreateView(CreateView):
@@ -110,6 +110,14 @@ class ContaAPagarUpdateView(UpdateView):
         
         if not hasattr(self.request.user, 'empresa') or not self.request.user.empresa:
             raise PermissionDenied("Usuário não associado a uma empresa.")
+        
+        conta = form.save(commit=False)
+        
+        if conta.status_pagamento:
+            
+            if not conta.data_pagamento:
+                conta.data_pagamento = timezone.now().date()  
+            conta.save()
         
         form.instance.empresa = self.request.user.empresa
         
@@ -175,7 +183,7 @@ class ContaAReceberDetailView(DetailView):
     context_object_name = 'conta_a_receber'
 
     def get_object(self):
-        self.set_empresa()  # Configura o banco de dados
+
         return super().get_object()
 
 
@@ -206,18 +214,22 @@ class ContaAReceberUpdateView(UpdateView):
     success_url = reverse_lazy('conta_a_receber_list')
 
     def form_valid(self, form):
-        
         if not self.request.user.is_authenticated:
             return redirect('login')  # Ou redirecionar para a página desejada
-        
         
         if not hasattr(self.request.user, 'empresa') or not self.request.user.empresa:
             raise PermissionDenied("Usuário não associado a uma empresa.")
         
+        conta = form.save(commit=False)
+        
+        if conta.status_recebimento and not conta.data_recebimento:
+            conta.data_recebimento = timezone.now().date()  # Corrigido para usar "=" e não "-"
+            conta.save()
         
         form.instance.empresa = self.request.user.empresa
         
         return super().form_valid(form)
+
 
 
 class ContaAReceberDeleteView(DeleteView):
@@ -226,7 +238,7 @@ class ContaAReceberDeleteView(DeleteView):
     success_url = reverse_lazy('conta_a_receber_list')
 
     def get_object(self):
-        self.set_empresa()  # Configura o banco de dados
+        
         return super().get_object()
     
 

@@ -18,7 +18,9 @@
 .container-mt-5 {
   margin-top: 100px; /* Ajuste conforme necessário */
 }
-
+.container-h1 {
+  text-align: center;
+}
 /* Estilo dos campos do formulário */
 .animal-form p {
   margin-bottom: 25px;

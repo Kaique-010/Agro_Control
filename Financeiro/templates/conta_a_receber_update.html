@@ -1,6 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const statusRecebimento = document.getElementById("id_status_recebimento");
+    const modal = new bootstrap.Modal(
+      document.getElementById("recebimentoModal")
+    );
+    const dataRecebimento = document.getElementById("id_data_recebimento");
+    const form = document.querySelector("form");
 
-{% block content %}
+    statusRecebimento.addEventListener("change", function () {
+      if (this.checked) {
+        modal.show();
+      } else {
+        dataRecebimento.value = ""; // Limpa a data caso desmarque
+      }
+    });
+
+    document
+      .getElementById("recebimentoModal")
+      .addEventListener("hidden.bs.modal", function () {
+        if (!dataRecebimento.value) {
+          statusRecebimento.checked = false; // Desmarca caso não tenha data
+        }
+      });
+
+    // Antes de submeter o formulário, verifica se precisa preencher a data de recebimento
+    form.addEventListener("submit", function (event) {
+      if (statusRecebimento.checked && !dataRecebimento.value) {
+        event.preventDefault(); // Impede o envio se não houver data
+        alert("Por favor, informe a data de recebimento antes de salvar.");
+        modal.show();
+      }
+    });
+  });
+</script>
+
 <style>
   .container {
     margin-top: 3%;
@@ -58,8 +92,10 @@
     color: rgb(184, 233, 193);
   }
 </style>
+
 <h2>
-  {% if form.instance.pk %}Editar Conta a Pagar{% else %}Inserir Conta a Receber{% endif %}
+  {% if form.instance.pk %}Editar Conta a Pagar{% else %}Inserir Conta a
+  Receber{% endif %}
   <i class="bi bi-calculator"></i>
 </h2>
 
@@ -69,70 +105,141 @@
       {% csrf_token %}
       <div class="row mb-4">
         <div class="col-md-6">
-          <label for="documento" class="form-label text-white"> Documento:</label>
+          <label for="documento" class="form-label text-white"
+            >Documento:</label
+          >
           {{ form.documento }}
         </div>
-        <div class="col-md-3"></div><br>
+        <div class="col-md-3"></div>
         <div class="col-md-3">
-          <label for="status" class="form-label text-white"> Recebido: :</label>
+          <label for="status" class="form-label text-white">Recebido:</label>
           {{ form.status_recebimento }}
         </div>
-
       </div>
+
       <div class="row mb-4">
         <div class="col-md-6">
-          <label for="data_emissao" class="form-label text-white">Data Emissão:</label>
+          <label for="data_emissao" class="form-label text-white"
+            >Data Emissão:</label
+          >
           {{ form.data_emissao }}
         </div>
-
         <div class="col-md-6">
-          <label for="data_vencimento" class="form-label text-white">Data Vencimento:</label>
+          <label for="data_vencimento" class="form-label text-white"
+            >Data Vencimento:</label
+          >
           {{ form.data_vencimento }}
         </div>
       </div>
+
       <div class="row mb-4">
         <div class="col-md-6">
-          <label for="parcela" class="form-label text-white">Nº da Parcela:</label>
+          <label for="parcela" class="form-label text-white"
+            >Nº da Parcela:</label
+          >
           {{ form.parcela }}
         </div>
-
         <div class="col-md-6">
-          <label for="descricao" class="form-label text-white">Descrição:</label>
+          <label for="descricao" class="form-label text-white"
+            >Descrição:</label
+          >
           {{ form.descricao }}
         </div>
       </div>
+
       <div class="row mb-4">
         <div class="col-md-6">
           <label for="valor" class="form-label text-white">Valor R$:</label>
           {{ form.valor }}
         </div>
       </div>
+
       <div class="row mb-4">
         <div class="col-md-6">
           <label for="pessoas" class="form-label text-white">Recebedor:</label>
           {{ form.pessoas }}
         </div>
-
         <div class="col-md-6">
-          <label for="descricao" class="form-label text-white">Categoria:</label>
+          <label for="categorias" class="form-label text-white"
+            >Categoria:</label
+          >
           {{ form.categorias }}
         </div>
       </div>
+
       <div class="row mb-4">
         <div class="col-md-12">
-          <label for="observacoes" class="form-label text-white">Observações do titulo</label>
+          <label for="observacoes" class="form-label text-white"
+            >Observações do título:</label
+          >
           {{ form.observacoes }}
         </div>
       </div>
+
       <div class="row mb-4">
         <div class="col-md-4">
-          <label for="forma_pagamento" class="form-label text-white">Forma de Recebimento</label>
+          <label for="forma_pagamento" class="form-label text-white"
+            >Forma de Recebimento:</label
+          >
           {{ form.forma_recebimento }}
         </div>
+        <div class="col-md-4">
+          <label for="centro_de_custo" class="form-label text-white"
+            >Centro de Custos:</label
+          >
+          {{ form.centro_de_custo }}
+        </div>
+        <div class="col-md-4">
+          <label for="plano_de_contas" class="form-label text-white"
+            >Plano de Contas:</label
+          >
+          {{ form.plano_de_contas }}
+        </div>
       </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Salvar</button>
 
-  <a href="{% url 'conta_a_receber_list' %}" class="btn btn-secondary">Voltar</a>
-  </form>
-  {% endblock %}
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="{% url 'conta_a_receber_list' %}" class="btn btn-secondary"
+        >Voltar</a
+      >
+    </form>
+
+    <!-- Modal para Data de Recebimento -->
+    <div
+      class="modal fade"
+      id="recebimentoModal"
+      tabindex="-1"
+      aria-labelledby="modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Data de Recebimento</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <label for="data_recebimento" class="form-label"
+              >Informe a data de recebimento:</label
+            >
+            {{ form.data_recebimento }}
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
