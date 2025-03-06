@@ -12,6 +12,7 @@ from Agenda.models import Evento
 from companies.models import Enterprise
 from System import settings
 from Agenda.forms import EventoForm
+from Agenda.callmebot_services import CallMeBot
 from datetime import timedelta, datetime
 import logging
 import json
@@ -43,13 +44,17 @@ class AgendaCreateView(CreateView):
 
     def form_valid(self, form):
 
-
         evento = form.save(commit=False)
         evento.user = self.request.user
         form.instance.empresa = self.request.user.empresa  
         
         evento.save()
+        botmessage = CallMeBot()
+        botmessage.send_message(
+            message=f'Evento {evento.id}, {evento.descricao} criado com sucesso!')
         return super().form_valid(form)
+
+        
         
     
 
@@ -66,6 +71,9 @@ class AgendaUpdateView(UpdateView):
         evento = form.save(commit=False)
         evento.user = self.request.user
         evento.save()
+        botmessage = CallMeBot()
+        botmessage.send_message(
+            message=f'Evento {evento.id}, {evento.descricao} criado com sucesso!')
         return super().form_valid(form)
 
    
