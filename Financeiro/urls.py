@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     AtualizarValorPagoView, CadastrarCentroDeCusto, CadastrarPlanoDeContas, ContaAPagarListView, ContaAPagarDetailView, ContaAPagarCreateView, ContaAPagarUpdateView, ContaAPagarDeleteView,
-    ContaAReceberListView, ContaAReceberDetailView, ContaAReceberCreateView, ContaAReceberUpdateView, ContaAReceberDeleteView, DeletarCentrosDeCustos, DeletarPlanoDeContas, DetalhesCentroDeCusto, DetalhesPlanoDeContas, EditarCentrosDeCustos, EditarParcelaView, EditarPlanoDeContas, ExcluirParcelaView, ListarCentrosDeCusto, ListarPlanoDeContas, ParcelasListView, fluxo_caixa, dash,exportar_contaapagar_excel, exportar_contaareceber_excel, GerarParcelasView, ParcelasListView
+    ContaAReceberListView, ContaAReceberDetailView, ContaAReceberCreateView, ContaAReceberUpdateView, ContaAReceberDeleteView, DeletarCentrosDeCustos, DeletarPlanoDeContas, DetalhesCentroDeCusto, DetalhesPlanoDeContas, EditarCentrosDeCustos, EditarParcelaView, EditarPlanoDeContas, ExcluirParcelaView, ListarCentrosDeCusto, ListarPlanoDeContas, ParcelasListView, exportar_cc_excel, exportar_cc_pdf, fluxo_caixa, dash,exportar_contaapagar_excel, exportar_contaareceber_excel, GerarParcelasView, ParcelasListView
 )
 from Financeiro.views import (
     FormaPagamentoListView, FormaPagamentoCreateView, FormaPagamentoUpdateView, FormaPagamentoDeleteView,
@@ -65,4 +65,6 @@ urlpatterns = [
     path('planos/editar/<int:pk>/', EditarPlanoDeContas.as_view(), name='planos_editar'),
     path('planos/detalhes/<int:pk>/', DetalhesPlanoDeContas.as_view(), name='planos_detalhes'),
     path('planos/excluir/<int:pk>/', DeletarPlanoDeContas.as_view(), name='planos_excluir'),
+    path('exportarcc/', exportar_cc_excel, name='exportar_cc_excel'),
+    path('exportarccpdf/', exportar_cc_pdf, name='exportar_cc_pdf'),
 ]

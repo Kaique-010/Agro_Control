@@ -143,6 +143,7 @@ def exportar_pessoas_excel(request):
     response['Content-Disposition'] = 'attachment; filename=pessoas.xlsx'
     return response
 
+
 def buscar_cep(cep):
     url = f"https://viacep.com.br/ws/{cep}/json/"
     try:

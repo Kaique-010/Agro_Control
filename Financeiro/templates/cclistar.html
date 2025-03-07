@@ -10,33 +10,52 @@
         margin-top: 50px;
     }
 
-    th, td {
+    th,
+    td {
         text-align: center;
         padding: 10px;
     }
 
-    .bi-pencil { color: white; }
-    .bi-trash { color: white; }
-    .bi-eye { color: azure; }
-    .bi-calculator { color: aliceblue; }
+    .bi-pencil {
+        color: white;
+    }
+
+    .bi-trash {
+        color: white;
+    }
+
+    .bi-eye {
+        color: azure;
+    }
+
+    .bi-calculator {
+        color: aliceblue;
+    }
 
     .btn-warning {
         background-color: darksalmon;
     }
 
-    .btn-success, .btn-primary {
+    .btn-success,
+    .btn-primary {
         background-color: rgb(39, 193, 199);
         color: white;
         margin-bottom: 25px;
     }
 
     @media (max-width: 768px) {
-        th, td {
-            font-size: 13px; /* Reduz tamanho da fonte */
-            padding: 5px; /* Reduz padding */
+
+        th,
+        td {
+            font-size: 13px;
+            /* Reduz tamanho da fonte */
+            padding: 5px;
+            /* Reduz padding */
         }
+
         .btn {
-            font-size: 12px; /* Diminui botões */
+            font-size: 12px;
+            /* Diminui botões */
             padding: 5px 10px;
         }
     }
@@ -71,16 +90,16 @@
                 {% for centro in centros %}
                 <tr>
                     <td>
-                        <a href="{% url 'detalhe_centro_de_custo'  centro.pk %}" class="btn btn-info btn-sm" title="Detalhes" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'detalhe_centro_de_custo'  centro.pk %}" class="btn btn-info btn-sm"
+                            title="Detalhes" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{% url 'editar_centro_de_custos'  centro.pk %}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'editar_centro_de_custos'  centro.pk %}" class="btn btn-warning btn-sm"
+                            title="Editar" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <a href="{% url 'deletar_centro_de_custo'  centro.pk %}" class="btn btn-danger btn-sm" title="Excluir" data-bs-toggle="tooltip"
-                            data-bs-placement="top">
+                        <a href="{% url 'deletar_centro_de_custo'  centro.pk %}" class="btn btn-danger btn-sm"
+                            title="Excluir" data-bs-toggle="tooltip" data-bs-placement="top">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
@@ -99,6 +118,13 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="col-md-6">
+    <a href="{% url 'exportar_cc_excel' %}" class="btn btn-info">
+        <i class="bi bi-file-earmark-excel"></i> Exportar para Excel
+    </a>
+    <a href="{% url 'exportar_cc_pdf' %}" class="btn btn-info" target="_blank">Abrir Relatório PDF</a>
 </div>
 
 {% endblock %}

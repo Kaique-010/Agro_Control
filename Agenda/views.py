@@ -51,7 +51,7 @@ class AgendaCreateView(CreateView):
         evento.save()
         botmessage = CallMeBot()
         botmessage.send_message(
-            message=f'Evento {evento.id}, {evento.descricao} criado com sucesso!')
+            message=f'Evento{evento.id}, {evento.descricao} criado com sucesso!')
         return super().form_valid(form)
 
         

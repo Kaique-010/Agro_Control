@@ -99,22 +99,50 @@
 .bi-facebook {
   color: #3b5998;
 }
+.bi-facebook:hover {
+  color: gold;
+}
 
 .bi-twitter {
   color: #00acee;
+}
+.bi-twitter:hover {
+  color: gold;
 }
 
 .bi-instagram {
   color: #e4405f;
 }
+.bi-instagram:hover {
+  color: gold;
+}
 
 .bi-linkedin {
   color: #0e76a8;
 }
-
-.social-icon:hover i {
-  color: #ffb121;
-  /* Cor ao passar o mouse */
+.bi-linkedin:hover {
+  color: gold;
 }
 
+.bi-house {
+  color: cadetblue;
+}
 
+.bi-gear-wide-connected {
+  color: bisque;
+}
+
+.bi-box-seam {
+  color: darkgoldenrod;
+}
+
+.bi-currency-dollar {
+  color: darkgreen;
+}
+.bi-calendar {
+  color: indianred;
+}
+
+.bi-person-gear {
+  color: #00acee;
+}

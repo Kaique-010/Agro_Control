@@ -9,6 +9,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
+from django.contrib.staticfiles import finders
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -21,7 +22,12 @@ from django.shortcuts import redirect, render
 from django.db.models import Sum
 from datetime import date, datetime, timedelta, timezone
 from django.utils import timezone
-
+from io import BytesIO
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.platypus import Table, TableStyle
 from django.utils.dateparse import parse_date
 
 
@@ -918,3 +924,103 @@ class DeletarPlanoDeContas(DeleteView):
         # Preenche o campo empresa com a empresa do usuário logado
         form.instance.empresa = self.request.user.empresa  # Ajuste isso conforme necessário
         return super().form_valid(form)
+
+
+
+
+def exportar_cc_excel(request):
+    if not request.user.empresa:
+        raise IntegrityError("Usuário não associado a uma empresa")
+    
+
+    
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'CentrosdeCustos'
+
+    # Define o cabeçalho
+    columns = ['Código', 'Nome', 'Pai', 'Tipo']
+    worksheet.append(columns)
+
+    # Adiciona os dados
+    centros = CentroDeCusto.objects.all()  
+    for centro in centros:
+        worksheet.append([
+            str(centro.codigo),
+            str(centro.nome),
+            str(centro.pai),
+            str(centro.tipo)
+            
+        ])
+
+    buffer = BytesIO()
+    workbook.save(buffer)
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=cc.xlsx'
+    return response
+
+
+
+
+def gerar_tabela(centros):
+   
+   
+    """Cria a tabela formatada para o PDF"""
+    data = [["Código", "Nome", "Pai", "Tipo"]]  # Cabeçalhos
+    
+    for centro in centros:
+        pai = centro.pai.nome if centro.pai else "N/A"
+        data.append([str(centro.codigo), centro.nome, pai, centro.tipo])
+
+    # Criação da tabela com os estilos 
+    table = Table(data, colWidths=[80, 200, 120, 80])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    return table
+
+def exportar_cc_pdf(request):
+    """Gera e retorna o relatório de Centros de Custo em PDF"""
+    if not request.user.empresa:
+        raise IntegrityError("Usuário não associado a uma empresa")
+
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    
+    # Carregar imagem
+    image_path = finders.find('accounts/image/logo2.jpg')
+    if image_path:
+        pdf.drawImage(image_path, 50, height - 100, width=120, height=60)  # Ajustando posição
+
+    # Título
+    pdf.setFont("Helvetica-Bold", 16)
+    pdf.drawCentredString(width / 2, height - 50, "Relatório de Centros de Custo")
+
+    # Obtendo os dados e gerando tabela
+    centros = CentroDeCusto.objects.all()
+    table = gerar_tabela(centros)
+
+    # Centralizando a tabela
+    table_width, table_height = table.wrap(0, 0)
+    x_position = (width - table_width) / 2
+    y_position = height - 180 - table_height  # Ajustar a posição vertical
+
+    # Desenhar tabela no PDF
+    table.drawOn(pdf, x_position, y_position)
+
+    pdf.showPage()
+    pdf.save()
+
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type="application/pdf")
+    response["Content-Disposition"] = 'inline; filename="cc.pdf"'
+    return response
