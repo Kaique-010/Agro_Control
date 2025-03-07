@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Lista de Estoques de Fazendas{% endblock %}
+{% extends 'base.html' %} {% load static %} {% block title %}Lista de Estoques
+de Fazendas{% endblock %} {% block content %}
 
-{% block content %}
-
-<br><br><br>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}">
+<br /><br /><br />
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+/>
+<link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}" />
 <div class="container mt-5">
   <div class="card">
     <div class="card-body">
@@ -29,9 +29,9 @@
           <thead class="thead-dark">
             <tr>
               <th>Ações</th>
-              <th>ID</th>
               <th>Produto</th>
-              <th>Quantidade</th>
+              <th>Quantidade Atual</th>
+              <th>Custo Atualizado</th>
               <th>Fazenda</th>
             </tr>
           </thead>
@@ -54,9 +54,9 @@
                   <i class="bi bi-trash"></i>
                 </a>
               </td>
-              <td>{{ estoque.id }}</td>
               <td>{{ estoque.produto.nome }}</td>
               <td>{{ estoque.quantidade }}</td>
+              <td>{{ estoque.custo_medio_atualizado }}</td>
               <td>{{ estoque.fazenda.nome }}</td>
             </tr>
             {% endfor %}

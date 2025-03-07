@@ -66,7 +66,8 @@ class CategoriaProdutoForm(BaseForm):
 class ProdutoAgroForm(BaseForm):
     class Meta:
         model = ProdutoAgro
-        fields = ['codigo', 'nome', 'categoria', 'unidade_medida', 'descricao', 'custo_medio']
+        exclude = ['codigo']
+        fields = [ 'nome', 'categoria', 'unidade_medida', 'descricao', 'custo_medio']
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-control col-6', 'placeholder': 'Código'}),
             'nome': forms.TextInput(attrs={'class': 'form-control col-6', 'placeholder': 'Nome do Produto'}),

@@ -24,13 +24,17 @@ class BaseModel(models.Model):
     def save(self, *args, **kwargs):
         """Garante que o usuário responsável seja registrado ao salvar"""
         if hasattr(self, '_request_user') and self._request_user:
+            if not self.empresa_id and hasattr(self._request_user, 'empresa'):
+                self.empresa = self._request_user.empresa
+            if not self.filial_id and hasattr(self._request_user, 'filial'):
+                self.filial = self._request_user.filial
             if not self.atualizado_por:
                 self.atualizado_por = self._request_user
-            if not self.empresa_id:
-                self.empresa = self._request_user.empresa
-            if not self.filial_id:
-                self.filial = self._request_user.filial
+        elif not self.empresa_id:
+            raise ValueError("A empresa deve ser definida antes de salvar.")  # Para evitar erro de integridade
+
         super().save(*args, **kwargs)
+
 
 class Fazenda(BaseModel):
     nome = models.CharField(max_length=255, db_index=True)
@@ -95,9 +99,15 @@ class ProdutoAgro(BaseModel):
 
     class Meta:
         db_table = 'produtos_agro'
-        
     
     def save(self, *args, **kwargs):
+        if not self.codigo:  # Apenas gera um novo código se ainda não tiver um
+            ultimo_codigo = ProdutoAgro.objects.order_by('-codigo').first()
+            if ultimo_codigo and ultimo_codigo.codigo.isdigit():
+                self.codigo = str(int(ultimo_codigo.codigo) + 1).zfill(6)  # Ex: 000001, 000002, ...
+            else:
+                self.codigo = "000001"  # Primeiro código
+
         self.nome = self.nome.upper()
         self.unidade_medida = self.unidade_medida.upper()
         self.descricao = self.descricao.upper() if self.descricao else None  # Verifica se não é None
@@ -105,6 +115,7 @@ class ProdutoAgro(BaseModel):
 
     def __str__(self):
         return f"{self.codigo} - {self.nome} ({self.categoria})"
+
 
     
     

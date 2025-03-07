@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Lista de Movimentações {% endblock %}
+{% extends 'base.html' %} {% load static %} {% block title %}Lista de
+Movimentações {% endblock %} {% block content %}
 
-{% block content %}
-
-<br><br><br>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}">
+<br /><br /><br />
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+/>
+<link rel="stylesheet" href="{% static 'agricola/liststyles.css' %}" />
 <div class="container mt-5">
   <div class="card">
     <div class="card-body">
@@ -33,6 +33,7 @@
               <th>Produto</th>
               <th>Quantidade</th>
               <th>Tipo de Movimentação</th>
+              <th>Custo</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +58,8 @@
               <td>{{ movimentacao.id }}</td>
               <td>{{ movimentacao.produto.nome }}</td>
               <td>{{ movimentacao.quantidade }}</td>
-              <td>{{ movimentacao.tipo_movimentacao }}</td>
+              <td>{{ movimentacao.tipo }}</td>
+              <td>{{ movimentacao.custo_unitario }}</td>
             </tr>
             {% endfor %}
           </tbody>

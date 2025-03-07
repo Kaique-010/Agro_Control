@@ -86,6 +86,7 @@ class TalhaoDeleteView( DeleteView):
 class ProdutoAgroListView( ListView):
     model = ProdutoAgro
     template_name = "agro/produtoagro_list.html"
+    context_object_name = 'produtos'
 
 
 class ProdutoAgroCreateView( CreateView):
@@ -117,6 +118,7 @@ class ProdutoAgroDeleteView( DeleteView):
 class EstoqueFazendaListView( ListView):
     model = EstoqueFazenda
     template_name = "agro/estoquefazenda_list.html"
+    context_object_name = 'estoques'
 
 
 class EstoqueFazendaCreateView( CreateView):
@@ -150,6 +152,7 @@ class EstoqueFazendaDeleteView( DeleteView):
 class MovimentacaoEstoqueListView( ListView):
     model = MovimentacaoEstoque
     template_name = "agro/movimentacaoestoque_list.html"
+    context_object_name = 'movimentacoes'
 
 
 class MovimentacaoEstoqueCreateView( CreateView):
@@ -160,8 +163,10 @@ class MovimentacaoEstoqueCreateView( CreateView):
     
     
     def form_valid(self, form):
-        # Aqui, o usuário logado é passado para o formulário
-        form.save(user=self.request.user)
+        self.object = form.save(commit=False)
+        self.object._request_user = self.request.user  # Define o usuário manualmente
+        self.object.save()
+        form.save_m2m()
         return super().form_valid(form)
 
 
